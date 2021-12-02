@@ -1,27 +1,25 @@
-# Code of Adven
+# Code of Advent
 
 # Part 1
 
-fname = "input02.txt"
-input = readlines(fname)
-
 mutable struct Submarine
-    hpos::Int
-    depth::Int
+    hpos::Int64
+    depth::Int64
 end
 
-accumulate(data) = foldl(1:length(data), init=Submarine(0,0)) do acc, i
-    commando = match(r"(forward|up|down) (\d)", data[i])
+dive_part1(data) = foldl(data, init=Submarine(0,0)) do submarine, order
+    commando = match(r"^(forward|up|down)\s(\d)$", order)
     isnothing(commando) && error("Input format error!")
-    commando[1] == "forward" && (acc.hpos += parse(Int, commando[2]))
-    commando[1] == "up"      && (acc.depth -= parse(Int, commando[2]))
-    commando[1] == "down"    && (acc.depth += parse(Int, commando[2]))
-    acc
+    direction, speed = commando[1], parse(Int, commando[2])
+    direction == "forward" && (submarine.hpos += speed)
+    direction == "up"      && (submarine.depth -= speed)
+    direction == "down"    && (submarine.depth += speed)
+    submarine
 end
 
-multiply(acc) = acc.hpos * acc.depth
+luckystar(submarine) = submarine.hpos * submarine.depth
 
-aoc02a(data) = multiply(accumulate(data))
+aoc02a(data) = luckystar(dive_part1(data))
 
 # Part 2
 
@@ -31,29 +29,26 @@ mutable struct dasBoot
     depth::Int64
 end
 
-function update!(acc, action, value)
-    if action[1] == 'd'
-        acc.aim += value
-    elseif action[1] == 'u'
-        acc.aim -= value
-    else
-        acc.hpos += value
-        acc.depth += acc.aim * value
-    end
-    acc
+function update!(submarine, direction, speed)
+    direction == 'd' && (submarine.aim += speed; return submarine)
+    direction == 'u' && (submarine.aim -= speed; return submarine)
+    submarine.hpos += speed
+    submarine.depth += submarine.aim * speed
+    submarine
 end
 
-accumulate2(data) = foldl(1:length(data), init=dasBoot(0,0,0)) do acc, i
-    commando = match(r"(forward|up|down) (\d)", data[i])
+dive_part2(data) = foldl(data, init=dasBoot(0,0,0)) do submarine, order
+    commando = match(r"^(forward|up|down)\s(\d)$", order)
     isnothing(commando) && error("Input format error!")
-    update!(acc, commando[1], parse(Int, commando[2]))
+    update!(submarine, first(commando[1]), parse(Int, commando[2]))
 end
 
-multiply(acc) = acc.hpos * acc.depth
-
-aoc02b(data) = multiply(accumulate2(data))
+aoc02b(data) = luckystar(dive_part2(data))
 
 # Dive!
+
+fname = "input.txt"
+input = readlines(fname)
 
 @show aoc02a(input)
 @show aoc02b(input);
