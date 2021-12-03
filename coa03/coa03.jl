@@ -24,7 +24,7 @@ function prune!(diagnostics, bitno, reference_level::Bool)
         rate += diag[bitno] == '1'
         len += 1
     end
-    mostcommon = ((rate >= len-rate)⊻!reference_level) ? '1' : '0'
+    mostcommon = (rate >= len-rate)⊻reference_level ? '0' : '1'
     filter!(data->data[bitno]==mostcommon, diagnostics)
 end
 
