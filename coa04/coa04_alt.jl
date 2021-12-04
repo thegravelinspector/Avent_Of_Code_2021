@@ -18,7 +18,7 @@ get_board(tombola, bix) = @view tombola.boards[bix:bix+4,:]
 get_winnings(board) = -board[1,1]
 isbingo(board) = board[1,1] < -1
 
-function one_turn!(tombola, bix, nix)
+function next_bingo!(tombola, bix, nix)
     X = -1
     BINGO = SVector(X, X, X, X, X)
     while true
@@ -43,7 +43,7 @@ end
 
 function Base.iterate(it::Tombola, (bix, nix)=(1, 1))
     all(<(-1), it.boards[1:5:end,1]) && return nothing
-    bix, nix = one_turn!(it, bix, nix)
+    bix, nix = next_bingo!(it, bix, nix)
     nix > length(it.numbers) && return nothing
     return  (get_board(it, bix), (bix, nix))
 end
