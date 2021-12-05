@@ -46,8 +46,8 @@ function last_bingo_score(numbers, boards)
         isremoved_board(boards, bix) && continue
         board = @view boards[bix:bix+4,:]
         if is_bingo!(board, n)
-            remove!(board, n)
             last_bingo_score = winnings(board) * n
+            remove!(board, n)
         end
     end
     last_bingo_score
