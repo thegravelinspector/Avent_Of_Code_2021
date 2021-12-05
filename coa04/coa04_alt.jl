@@ -1,16 +1,27 @@
-using DelimitedFiles, StaticArrays
+using StaticArrays
+
+get_numbers(data) = parse.(Int, split(data[1], ',')), @view data[3:end]
+
+function get_boards(data)
+    len = 5(length(data)+1)÷6
+    boards = Matrix{Int64}(undef, len, 5)
+    ix = 1
+    for d in data
+        isempty(d) && continue
+        boards[ix,:] = parse.(Int, split(d))
+        ix += 1
+    end
+    boards, ""
+end
 
 mutable struct Tombola
     boards::Matrix{Int64}
     numbers::Vector{Int64}
 end
 
-get_numbers(fname) = parse.(Int, split(readline(fname), ','))
-get_boards(fname) = readdlm(fname, Int, skipstart=2)
-
-function Tombola(fname)
-    numbers = get_numbers(fname)
-    boards = get_boards(fname)
+function Tombola(data)
+    numbers, data = get_numbers(data)
+    boards, _ = get_boards(data)
     Tombola(boards, numbers)
 end
 
@@ -58,5 +69,7 @@ end
 
 # To cheat the giant squid or not..
 
-@show play_bingo(Tombola("input.txt"); save_the_sub=false)
-@show play_bingo(Tombola("input.txt"); save_the_sub=true);
+input = readlines("input.txt")
+
+@show play_bingo(Tombola(input); save_the_sub=false)
+@show play_bingo(Tombola(input); save_the_sub=true);
