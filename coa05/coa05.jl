@@ -4,7 +4,7 @@ function get_vent_lines(data)
     max_reach = 0
     lines = Matrix{Int}(undef, length(data), 4)
     for (i,datapoint) in enumerate(data)
-        lines[i,:] = parse.(Int, SubString.(datapoint, findall(r"(\d+)", datapoint)))
+        lines[i,:] = parse.(Int, match(r"(\d+),(\d+) -> (\d+),(\d+)", datapoint))
         max_reach = max(max_reach, maximum(@view lines[i,:]))
     end
     lines, max_reach
