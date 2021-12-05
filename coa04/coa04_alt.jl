@@ -72,4 +72,14 @@ end
 input = readlines("input.txt")
 
 @show play_bingo(Tombola(input); save_the_sub=false)
-@show play_bingo(Tombola(input); save_the_sub=true);
+@show play_bingo(Tombola(input); save_the_sub=true)
+
+using BenchmarkTools
+
+# Without slow disk IO
+function benchit(input)
+    play_bingo(Tombola(input); save_the_sub=false),
+    play_bingo(Tombola(input); save_the_sub=true)
+end
+
+@btime benchit(input)

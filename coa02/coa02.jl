@@ -19,7 +19,7 @@ end
 
 luckystar(submarine) = submarine.hpos * submarine.depth
 
-aoc02a(data) = luckystar(dive_part1(data))
+coa02_part1(data) = luckystar(dive_part1(data))
 
 # Part 2
 
@@ -43,12 +43,21 @@ dive_part2(data) = foldl(data, init=dasBoot(0,0,0)) do submarine, order
     update!(submarine, first(commando[1]), parse(Int, commando[2]))
 end
 
-aoc02b(data) = luckystar(dive_part2(data))
+coa02_part2(data) = luckystar(dive_part2(data))
 
 # Dive!
 
 fname = "input.txt"
 input = readlines(fname)
 
-@show aoc02a(input)
-@show aoc02b(input);
+@show coa02_part1(input)
+@show coa02_part2(input);
+
+using BenchmarkTools
+
+# Without slow disk IO
+function benchit(input)
+    coa02_part1(input), coa02_part2(input)
+end
+
+@btime benchit(input)

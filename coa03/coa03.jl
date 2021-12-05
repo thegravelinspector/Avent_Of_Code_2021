@@ -37,7 +37,7 @@ function diagnose(data, reference_level::Bool)
     parse(Int, data[1], base=2)
 end
 
-function aoc03_part2(test_data)
+function coa03_part2(test_data)
     oxygen_generator_rating = diagnose(test_data, true)
     CO2_scrubber_rating = diagnose(test_data, false)
     oxygen_generator_rating * CO2_scrubber_rating
@@ -48,4 +48,13 @@ end
 input = readlines("input.txt")
 
 @show coa03_part1(input)
-@show aoc03_part2(input)
+@show coa03_part2(input)
+
+using BenchmarkTools
+
+# Without slow disk IO
+function benchit(input)
+    coa03_part1(input), coa03_part2(input)
+end
+
+@btime benchit(input)

@@ -73,3 +73,12 @@ input = readlines("input.txt")
 
 @show coa04_part1(input)
 @show coa04_part2(input)
+
+using BenchmarkTools
+
+# Without slow disk IO
+function benchit(input)
+    coa04_part1(input), coa04_part2(input)
+end
+
+@btime benchit(input)
