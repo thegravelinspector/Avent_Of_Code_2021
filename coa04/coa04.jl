@@ -1,15 +1,26 @@
 # Code of Advent
 
-using DelimitedFiles, StaticArrays
+using StaticArrays
 
 # Part 1: Cheat the squid and lose the sub
 
-get_numbers(fname) = parse.(Int, split(readline(fname), ','))
-get_boards(fname) = readdlm(fname, Int, skipstart=2)
+get_numbers(data) = parse.(Int, split(data[1], ',')), @view data[3:end]
 
-function get_tombola(fname)
-    numbers = get_numbers(fname)
-    boards = get_boards(fname)
+function get_boards(data)
+    len = 5(length(data)+1)÷6
+    boards = Matrix{Int64}(undef, len, 5)
+    ix = 1
+    for d in data
+        isempty(d) && continue
+        boards[ix,:] = parse.(Int, split(d))
+        ix += 1
+    end
+    boards, ""
+end
+
+function get_tombola(data)
+    numbers, data = get_numbers(data)
+    boards, _     = get_boards(data)
     numbers, boards
 end
 
@@ -18,6 +29,7 @@ function is_bingo!(board, number)
     BINGO = SVector(X,X,X,X,X)
     ix = findfirst(==(number), board)
     isnothing(ix) && return false
+
     board[ix] = X
     board[ix[1],:] == BINGO && return true
     board[:,ix[2]] == BINGO
@@ -57,5 +69,7 @@ coa04_part2(fname) = last_bingo_score(get_tombola(fname)...)
 
 # Cheat or not to cheat
 
-@show coa04_part1("input.txt")
-@show coa04_part2("input.txt")
+input = readlines("input.txt")
+
+@show coa04_part1(input)
+@show coa04_part2(input)
