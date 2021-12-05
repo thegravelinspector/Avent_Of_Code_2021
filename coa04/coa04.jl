@@ -45,7 +45,7 @@ function first_bingo_score(numbers, boards)
     error("The sub sank anyway!")
 end
 
-coa04_part1(fname) = first_bingo_score(get_tombola(fname)...)
+coa04_part1(numbers, boards) = first_bingo_score(numbers, boards)
 
 # Part 2: Save the sub
 
@@ -65,20 +65,23 @@ function last_bingo_score(numbers, boards)
     last_bingo_score
 end
 
-coa04_part2(fname) = last_bingo_score(get_tombola(fname)...)
+coa04_part2(numbers, boards) = last_bingo_score(numbers, boards)
 
 # Cheat or not to cheat
 
 input = readlines("input.txt")
 
-@show coa04_part1(input)
-@show coa04_part2(input)
+numbers, boards = get_tombola(input)
+@show coa04_part1(numbers, copy(boards))
+@show coa04_part2(numbers, boards)
 
 using BenchmarkTools
 
 # Without slow disk IO
 function benchit(input)
-    coa04_part1(input), coa04_part2(input)
+    numbers, boards = get_tombola(input)
+    coa04_part1(numbers, copy(boards)),
+    coa04_part2(numbers, boards)
 end
 
 @btime benchit(input)
