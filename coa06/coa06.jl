@@ -9,27 +9,31 @@ function simulate_one(days)
     cumsum(num)
 end
 
-function make_gauge_function(days)
-    _gauge = simulate_one(days+8)
-    init_state -> _gauge[end-init_state]
+function make_gauge_function(max_days)
+    _gauge = simulate_one(max_days+8)
+    (day, init_state) -> sum(_gauge[day+9 .- init_state])
 end
 
 input = readline("input.txt")
 
-init_state = parse.(Int, split(input, ","))
-
-coa06(num_days, init_state; gauge=make_gauge_function(num_days)) = sum(gauge.(init_state))
+coa06(day, init_state; gauge=make_gauge_function(day)) = gauge(day, init_state)
 
 # Thanx for the fish
 
-@show coa06(80, init_state)
-@show coa06(256, init_state)
+init_state = parse.(Int, split(input, ','))
+g = make_gauge_function(256)
+
+@show coa06(80, init_state; gauge=g)
+@show coa06(256, init_state; gauge=g)
 
 using BenchmarkTools
 
 function benchit(input)
     init_state = parse.(Int, split(input, ","))
-    coa06(80, init_state), coa06(256, init_state)
+    g = make_gauge_function(256)
+
+    coa06(80, init_state; gauge=g),
+    coa06(256, init_state; gauge=g)
 end
 
 @btime benchit(input)
