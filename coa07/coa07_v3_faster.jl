@@ -6,33 +6,32 @@ end
 
 crabdrag(n) = n*(n+1) ÷ 2
 
-mean_high(v) = floor(Int, sum(v)/length(v))
-median_low(v) = ceil(Int, sort!(v)[length(v)÷2])
+mean(v) = sum(v)/length(v)
+median(v) = mean(sort!(v)[(length(v)+1)÷2:length(v)÷2+1])
 
-function get_data(input)
-    positions = parse.(Int, split(input, ','))
-    (;positions, lo=median_low(positions), hi=mean_high(positions))
+function coa07_part1(positions)
+    fuelcost(round(Int, median(positions)), positions)
 end
 
-coa07_part1(data) = fuelcost(data.lo, data.positions)
-coa07_part2(data) = fuelcost(data.hi, data.positions, crabdrag)
+function coa07_part2(positions)
+    lo = floor(Int, mean(positions))
+    minimum(fuelcost(pos, positions, crabdrag) for pos in [lo,lo+1])
+end
 
 # The whale is like darnit
 
 input = readline("input.txt")
 
-data = get_data(input)
-@show data.lo, data.hi
-
-@show coa07_part1(data)
-@show coa07_part2(data)
+positions = parse.(Int, split(input, ','))
+@show coa07_part1(positions)
+@show coa07_part2(positions)
 
 using BenchmarkTools
 
 function benchit(input)
-    data = get_data(input)
-    coa07_part1(data),
-    coa07_part2(data)
+    positions = parse.(Int, split(input, ','))
+    coa07_part1(positions),
+    coa07_part2(positions)
 end
 
 @btime benchit(input)
