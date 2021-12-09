@@ -25,7 +25,6 @@ function decode(line, clearrepr=clearrepr)
     end
 
     swaprows!(i, j, cb=ciperrepr) = cb[i,:], cb[j,:] = cb[j,:], cb[i,:] # >= julia v1.7
-    swapcols!(i, j, cb=ciperrepr) = cb[:,i], cb[:,j] = cb[:,j], cb[:,i]
     i = 1
     while i <= 10
         bit_sum = sum(@view ciperrepr[i,:])
@@ -39,16 +38,10 @@ function decode(line, clearrepr=clearrepr)
     done = [2,5,8,9]
 
     hamming_dists(i, code, subset) = [count((@view code[i,:]) .⊻ (@view code[j,:])) for j ∈ subset]
-
     findcode(i) = findfirst(==(hamming_dists(i, clearrepr, done)), [hamming_dists(j, ciperrepr, done) for j in 1:10])
 
     for i in setdiff(1:10, done)
         swaprows!(findcode(i),  i)
-    end
-
-    for j in 1:7
-        i = findfirst(==(@view ciperrepr[1:10, j]), eachcol(@view clearrepr[1:10,:]))
-        i != j && swapcols!(j,  i)
     end
 
     sum(10^(4-i) * (findfirst(==(@view ciperrepr[10+i,:]), eachrow(ciperrepr))-1) for i in 1:4)
