@@ -1,18 +1,20 @@
-function decode(line)
-    █, ░ = true, false
+# Code of Advent
 
-    #             a b c d e f g
-    clearrepr = [█ █ █ ░ █ █ █;  # 0
-                 ░ ░ █ ░ ░ █ ░;  # 1
-                 █ ░ █ █ █ ░ █;  # 2
-                 █ ░ █ █ ░ █ █;  # 3
-                 ░ █ █ █ ░ █ ░;  # 4
-                 █ █ ░ █ ░ █ █;  # 5
-                 █ █ ░ █ █ █ █;  # 6
-                 █ ░ █ ░ ░ █ ░;  # 7
-                 █ █ █ █ █ █ █;  # 8
-                 █ █ █ █ ░ █ █;] # 9
+█, ░ = true, false
 
+#             a b c d e f g
+clearrepr = [█ █ █ ░ █ █ █;  # 0
+             ░ ░ █ ░ ░ █ ░;  # 1
+             █ ░ █ █ █ ░ █;  # 2
+             █ ░ █ █ ░ █ █;  # 3
+             ░ █ █ █ ░ █ ░;  # 4
+             █ █ ░ █ ░ █ █;  # 5
+             █ █ ░ █ █ █ █;  # 6
+             █ ░ █ ░ ░ █ ░;  # 7
+             █ █ █ █ █ █ █;  # 8
+             █ █ █ █ ░ █ █;] # 9
+
+function decode(line, clearrepr=clearrepr)
     ciperrepr = falses(14, 7)
 
     i = 1
