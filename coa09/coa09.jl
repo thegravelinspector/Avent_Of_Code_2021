@@ -6,9 +6,10 @@ function get_data(input)
     (;M=PaddedView(9, A', (1:r+2,1:c+2), (2:r+1,2:c+1)), ixs=CartesianIndices((2:r+1, 2:c+1)))
 end
 
+neighbourhood(ix) = CartesianIndex.((ix + neighbour for neighbour in CartesianIndex.(((-1,0), (1,0), (0,-1), (0,1)))))
+
 function is_trough(M, ix)
-    neighbourhood = CartesianIndex.((ix + neighbour for neighbour in CartesianIndex.(((-1,0), (1,0), (0,-1), (0,1)))))
-    all(M[neighbourhood] .> M[ix])
+    all(M[neighbourhood(ix)] .> M[ix])
 end
 
 function coa09_part1(data)
@@ -23,7 +24,6 @@ function coa09_part1(data)
 end
 
 function floodfill!(M, ix)
-    neighbourhood(ix) = CartesianIndex.((ix + neighbour for neighbour in CartesianIndex.(((-1,0), (1,0), (0,-1), (0,1)))))
     function recusivfill(ix)
         depth = M[ix]
         if depth ∈ 0:8
