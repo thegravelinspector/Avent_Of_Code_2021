@@ -2,8 +2,8 @@ using PaddedViews
 
 function get_data(input)
     A = hcat([parse.(Int, collect(line)) for line in input]...)
-    r, c = size(A')
-    (;M=PaddedView(9, A', (1:r+2,1:c+2), (2:r+1,2:c+1)), ixs=CartesianIndices((2:r+1, 2:c+1)))
+    r, c = size(A)
+    (;M=PaddedView(9, A, (1:r+2,1:c+2), (2:r+1,2:c+1)), ixs=CartesianIndices((2:r+1, 2:c+1)))
 end
 
 neighbourhood(ix) = [ix + neighbour for neighbour in CartesianIndex.(((-1,0), (1,0), (0,-1), (0,1)))]
