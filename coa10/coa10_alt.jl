@@ -2,22 +2,20 @@
 
 se_score(c) = [3,57,1197,25137][findfirst(==(c), ")]}>")]
 ac_score(c) = findfirst(==(c), "([{<")
-median_odd(v) = sort!(v)[(length(v)+1)÷2]
 
-function remove_matched(line)
-    new_line = replace(line, "()" => "", "[]" => "", "{}" => "", "<>" => "")
-    line == new_line && return line
-    remove_matched(new_line)
+function error_match(line)
+    left = replace(line, "()" => "", "[]" => "", "{}" => "", "<>" => "")
+    line == left && return left, match(r"[\(\[{<]([\)\]}>])", left)
+    error_match(left)
 end
 
 function coa10(input)
     ses, acs = 0, Int[]
-    for left in remove_matched.(input)
-        m = match(r"[\(\[{<]([\)\]}>])", left)
-        isnothing(m) && (push!(acs, foldr((a,b)->ac_score(a)+5b, left, init=0)); continue)
-        ses += se_score(m.captures[1][1])
+    for (left, error) in error_match.(input)
+        isnothing(error) && (push!(acs, foldr((a,b)->ac_score(a)+5b, left, init=0)); continue)
+        ses += se_score(error.captures[1][1])
     end
-    (;syntax_error_score=ses, autocomplete_score=median_odd(acs))
+    (;syntax_error_score=ses, autocomplete_score=sort!(acs)[(length(acs)+1)÷2])
 end
 
 input = readlines("input.txt")
