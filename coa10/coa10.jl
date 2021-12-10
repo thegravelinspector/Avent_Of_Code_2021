@@ -34,7 +34,7 @@ function remove_matched(line)
     remove_matched(newline)
 end
 
-match_score(c) = findfirst(==(c), " ([{<") - 1
+match_score(c) = findfirst(==(c), "([{<")
 median_odd(v) = sort!(v)[(length(v)+1)÷2]
 
 function coa10_part2(data)
