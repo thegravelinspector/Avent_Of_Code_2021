@@ -14,7 +14,7 @@ function step!(m)::Bool
 
     has_flashed = falses(size(m.M))
     while true
-        new_flashes = (m.M .* .~has_flashed) .> 9
+        new_flashes = m.M .> 9 .&& .~has_flashed
         ~any(new_flashes) && break
         map(ix->m.M[neigh(ix, m.outside)] .+= 1, CartesianIndices(m.M)[new_flashes])
         has_flashed .|= new_flashes
