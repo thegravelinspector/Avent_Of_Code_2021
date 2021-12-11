@@ -1,9 +1,9 @@
-using PaddedViews
-
 function get_data(input)
     A = hcat([parse.(Int, collect(line)) for line in input]...)
     r, c = size(A)
-    (;M=PaddedView(9, A, (1:r+2,1:c+2), (2:r+1,2:c+1)), ixs=CartesianIndices((2:r+1, 2:c+1)))
+    M = fill(9, r+2, c+2)
+    M[2:end-1, 2:end-1] = A
+    (;M, ixs=CartesianIndices((2:r+1, 2:c+1)))
 end
 
 neighbourhood(ix) = [ix + neighbour for neighbour in CartesianIndex.(((-1,0), (1,0), (0,-1), (0,1)))]
@@ -23,29 +23,25 @@ function coa09_part1(data)
     (;M=data.M, sum_of_risk_levels=sum, trougs)
 end
 
-function floodfill!(M, ix)
-    function _recursivefill!(ix)
+function size_of_basin(M, ix, i)
+    size = 0
+    function recusivfill(ix)
         depth = M[ix]
         if depth ∈ 0:8
-            M[ix] = -M[ix]-1
+            M[ix] = -M[ix] - 1
+            size += 1
             for ix ∈ neighbourhood(ix)
-                _recursivefill!(ix)
+                recusivfill(ix)
             end
         end
     end
-    _recursivefill!(ix)
-    M
-end
-
-function size_of_basin(M, ix)
-    M = floodfill!(copy(M), ix)
-    size = count(<(0), M)
+    recusivfill(ix)
     size
 end
 
 function coa09_part2(data)
-    largest3 = partialsort!([size_of_basin(data.M, ix) for ix ∈ data.trougs], 1:3, rev=true)
-    (;product_of_basin_sizes=prod(largest3))
+    largest3 = partialsort!([size_of_basin(data.M, ix, -i) for (i, ix) ∈ enumerate(data.trougs)], 1:3, rev=true)
+    (;M=data.M, product_of_basin_sizes=prod(largest3))
 end
 
 input = readlines("input.txt")
