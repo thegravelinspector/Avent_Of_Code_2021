@@ -43,7 +43,7 @@ input = readlines("input.txt")
 molluscs = get_molluscs(input)
 
 coa11_part1!(molluscs)
-@show molluscs.num_flashes[]
+@show solution_part1 = molluscs.num_flashes[]
 
 coa11_part2!(molluscs)
-@show molluscs.step[];
+@show solution_part2 = molluscs.step[];
