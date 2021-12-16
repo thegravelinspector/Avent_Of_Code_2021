@@ -52,3 +52,7 @@ input = readlines("input.txt")
 polymer = get_polymer(input)
 
 @show coa14_part2(polymer, 40)
+
+using BenchmarkTools
+
+@btime coa14_part2(polymer, 40)
