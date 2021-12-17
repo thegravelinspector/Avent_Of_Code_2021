@@ -8,7 +8,7 @@ function get_polymer(input)
     (;template, rules, elements, all_pairs)
 end
 
-# All arguments passed make utiliy sunctions fuck..
+# All arguments passed make utiliy functions ..
 pairs_in(template) = [template[i:i+1] for i in 1:length(template)-1]
 elm2id(e; elements, all_pairs) = findfirst(==(e), elements) .+ length(all_pairs)
 pair2id(pair; all_pairs) = findfirst(==(pair), all_pairs)
