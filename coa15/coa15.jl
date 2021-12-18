@@ -120,16 +120,6 @@ end
 
 lowest_risk(costs) = costs[end,end] - costs[1,1]
 
-function solution(map)
-    S = get_min_costs(map)
-    println("Lowest risk = ", S[end,end] - map[1,1])
-
-    TT = trace(S)
-    println("Sum of the trace = ", sum([map[t...] for t in TT[1]]) - map[1,1])
-
-    show_trace(S, TT)
-end
-
 coa15_part1(cavern) = (;lowest_risk=lowest_risk(get_min_costs(cavern)))
 coa15_part2(cavern) = (;lowest_risk=lowest_risk(get_min_costs(large_map(cavern))))
 
