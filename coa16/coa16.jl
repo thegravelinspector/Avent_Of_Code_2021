@@ -42,8 +42,44 @@ function parse_packet(p, sver=0, rpn=[])
     @retrpn((;sver, info=5))
 end
 
+function execute!(rpn, ix, asm)
+    op = rpn[ix]
+    if hasfield(typeof(op), :snum)
+        len = sum(getfield.(rpn[ix:ix+op.snum], :len))
+        args = [popat!(rpn, ix+1).literal for _ in ix+1:ix+op.snum]
+        rpn[ix] = (; ver=0, typ=4, literal=asm(args...), len)
+    elseif hasfield(typeof(op), :slen)
+        slen, len, i = op.slen, 0, ix
+        for outer i in ix+1:length(rpn)
+            len += rpn[i].len
+            slen == len && break
+        end
+        args = [popat!(rpn, ix+1).literal for _ in ix+1:i]
+        rpn[ix] = (; ver=0, typ=4, literal=asm(args...), len=len+op.len)
+    end
+end
+
+function compute(rpn)
+    sver = pop!(rpn).sver
+    while true
+        op_ix = findprev(op->op.typ!=4, rpn, length(rpn))
+        isnothing(op_ix) && break
+        op = rpn[op_ix]
+        op.typ == 5 && execute!(rpn, op_ix, Int∘>)
+        op.typ == 6 && execute!(rpn, op_ix, Int∘<)
+        op.typ == 7 && execute!(rpn, op_ix, Int∘==)
+        op.typ == 0 && execute!(rpn, op_ix, +)
+        op.typ == 1 && execute!(rpn, op_ix, *)
+        op.typ == 2 && execute!(rpn, op_ix, min)
+        op.typ == 3 && execute!(rpn, op_ix, max)
+    end
+    rpn[1].literal
+end
+
 coa16_part1(parsed_packet) = parsed_packet[end].sver
+coa16_part2(parsed_packet) = compute(rpn)
 
 rpn = parse_packet(get_packets("input.txt")[1])
 
 @show coa16_part1(rpn)
+@show coa16_part2(rpn)
