@@ -1,3 +1,4 @@
 *.oma.md
-cookie*
+/cookie*
 secret*
+/startup.jl
