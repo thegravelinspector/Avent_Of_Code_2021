@@ -31,8 +31,7 @@ function distrelc(sd, c)
 end
 
 function similarity(nds1, nds2)
-    guessix = zeros(Int, length(nds1))
-    vals = zero(nds1)
+    guessix = zero(nds1)
     for (i, nd) in enumerate(nds1)
         ix = findall(==(0), nds2 .- nd)
         length(ix) > 1 && error("More then one match for distance")
