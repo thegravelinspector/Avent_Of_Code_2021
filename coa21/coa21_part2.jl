@@ -8,7 +8,6 @@ function get_random_start(fname)
 end
 
 function get_dirac_dice_branchings(diceset=[1:3, 1:3, 1:3])
-    shuffle(bb) = (bb[1][1], bb[2][1]), (bb[1][2], bb[2][2])
     Ω = collect(Iterators.product(diceset...))
     ssd = collect(Iterators.flatten(sum.(Ω)))
     [(d,count(==(d), ssd)) for d in unique(ssd)]
@@ -23,9 +22,9 @@ function game_step(player, multiverse, branchings, wonn)
             ng[player] = mod1(ng[player] + dicesum, 10)
             ng[player+2] += ng[player]
             if ng[player+2] >= 21
-                wonn[player] += multiplicity .* (player==1 ? multitude[1] : prod(multitude))
+                wonn[player] += multiplicity .* multitude
             else
-                next_step[ng] = get(next_step, ng, 0) .+ multiplicity .* prod(multitude)
+                next_step[ng] = get(next_step, ng, 0) .+ multiplicity .* multitude
             end
         end
     end
