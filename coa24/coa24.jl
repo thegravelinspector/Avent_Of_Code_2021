@@ -111,7 +111,6 @@ function coa24(prog)
 
     for (ix, size) in enumerate(sizes)
         sols = iterate(ix, 26^size, sols)
-        flush(stdout)
     end
 
     parse.(Int, join.(sols[[1, length(sols)]]))
