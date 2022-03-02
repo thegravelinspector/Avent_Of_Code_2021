@@ -113,11 +113,13 @@ function coa24(prog)
         sols = iterate(ix, 26^size, sols)
     end
 
-    parse.(Int, join.(sols[[1, length(sols)]]))
+    parse.(Int, join.(sols))
 end
 
 prog = readlines("input.txt")
 
 instantiate_return_partial_alu(prog)
 
-@show min_max = coa24(prog);
+all_sols = coa24(prog)
+
+@show extrema(all_sols);
