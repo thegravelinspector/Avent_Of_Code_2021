@@ -64,7 +64,7 @@ end
 
 function instantiate_return_partial_alu(prog)
     exp = "(w = 0; x = 0; y = 0; z = 0; n = 1;"
-    for (i, e) in enumerate(get_expressions(prog))
+    for e in get_expressions(prog)
         exp *= "z = " * string(e) * ";"
         exp *= "n == N && return z; n += 1;"
     end
@@ -120,4 +120,7 @@ prog = readlines("input.txt")
 
 instantiate_return_partial_alu(prog)
 
+using BenchmarkTools
+
 @show min_max = coa24(prog);
+@btime min_max = coa24(prog);
