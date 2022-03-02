@@ -95,12 +95,10 @@ end
 function iterate(N, size, sols0)
     n = N - length(sols0[1])
     sols = NTuple{N, Int64}[]
-    for s1 in sols0
-        for s2 in Iterators.product(fill(1:9, n)...)
-            d = tuplejoin(s1, s2)
-            f = rp_alu(d, N)
-            f < size && push!(sols, d)
-        end
+    for s1 in sols0, s2 in 1:9
+        d = tuplejoin(s1, s2)
+        f = rp_alu(d, N)
+        f < size && push!(sols, d)
     end
     sols
 end
