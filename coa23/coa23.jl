@@ -214,5 +214,5 @@ function coa23(burrow; chatt=false)
     min_cost[1]
 end
 
-@show cost_part1 = coa23(get_burrow("input.txt"))
-@show cost_part2 = coa23(get_burrow("input_large.txt"))
+@show @time cost_part1 = coa23(get_burrow("input.txt"))
+@show @time cost_part2 = coa23(get_burrow("input_large.txt"))
