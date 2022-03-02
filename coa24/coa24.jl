@@ -120,7 +120,4 @@ prog = readlines("input.txt")
 
 instantiate_return_partial_alu(prog)
 
-using BenchmarkTools
-
 @show min_max = coa24(prog);
-@btime min_max = coa24(prog);
