@@ -128,7 +128,6 @@ function coa24(prog)
 end
 
 prog = readlines("input.txt")
-expressions = get_expressions(prog)
 
 instantiate_return_partial_alu(prog)
 
