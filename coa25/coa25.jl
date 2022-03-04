@@ -16,14 +16,11 @@ function move!(trench, dir)
         r = 1
         trench[end,c] = trench[1,c]
         while r <= rows
-            if trench[r, c] == dir
-                next_r = r + 1
-                if trench[next_r, c] == Int8('.')
-                    trench[r, c] = Int8('.')
-                    trench[mod1(next_r, rows), c] = dir
-                    r += 1
-                    done = false
-                end
+            if trench[r, c] == dir && trench[r + 1, c] == Int8('.')
+                trench[r, c] = Int8('.')
+                trench[mod1(r + 1, rows), c] = dir
+                r += 1
+                done = false
             end
             r += 1
         end
