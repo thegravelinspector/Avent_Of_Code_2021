@@ -10,7 +10,7 @@ end
 
 function move!(trench, dir)
     rows, cols = size(trench) .- (1,1)
-    not_done = false
+    done = true
 
     for c in 1:cols
         r = 1
@@ -22,27 +22,20 @@ function move!(trench, dir)
                     trench[r, c] = Int8('.')
                     trench[mod1(next_r, rows), c] = dir
                     r += 1
-                    not_done = true
+                    done = false
                 end
             end
             r += 1
         end
     end
-    not_done
-end
-
-function step!(trench)
-    not_done = move!(trench, Int8('>'))
-    move!(transpose(trench), Int8('v')) || not_done
+    done
 end
 
 function coa25(trench)
-    i = 1
-    while
-        step!(trench)
-        i += 1
+    for i in Iterators.countfrom(1)
+        done = move!(trench, Int8('>'))
+        move!(transpose(trench), Int8('v')) && done && return i
     end
-    i
 end
 
 trench = get_trench("input.txt")
