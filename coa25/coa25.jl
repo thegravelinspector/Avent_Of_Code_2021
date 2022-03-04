@@ -15,7 +15,7 @@ function move!(trench, dir)
     trench[end,:] .= @view trench[1,:]
     for c in 1:cols
         r = 1
-        while true
+        while r <= rows
             if trench[r, c] == dir
                 next_r = r + 1
                 if trench[next_r, c] == Int8('.')
@@ -26,9 +26,8 @@ function move!(trench, dir)
                 end
             end
             r += 1
-            r > rows && break
-            end
         end
+    end
     not_done
 end
 
