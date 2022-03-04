@@ -12,9 +12,9 @@ function move!(trench, dir)
     rows, cols = size(trench) .- (1,1)
     not_done = false
 
-    trench[end,:] .= @view trench[1,:]
     for c in 1:cols
         r = 1
+        trench[end,c] = trench[1,c]
         while r <= rows
             if trench[r, c] == dir
                 next_r = r + 1
